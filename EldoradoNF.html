@@ -77,43 +77,37 @@ $.get(point_url, function(pointReturn) {
     var fz = pointReturn.properties.fireWeatherZone;
     fire_zone = fz.slice(fz.lastIndexOf('CAZ'))
     console.log(office, fire_zone);
-})
-// Query the office for the forecast url
-.then(function(){
+    // Query the office for the forecast url
     $.get(office_url + office, function(officeData) {
         forecast_url = officeData["@graph"][0]["@id"];
         console.log(forecast_url);
-    });
-})
-// Get the forecast
-.then(function(){
-    $.get(forecast_url, function(forecastData) {
-        var NWSText = forecastData.productText;
-        // find the start of fire zone 
-        var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
-        // I've seen 'Extended' and 'EXTENDED'
-        var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
-        var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
-        var FWF = NWSText.slice(beginText, extendedEnd);
-        // Push to page
-        $('#NWS').html(FWF.replace(/\n/g, "<br />"));
-    });
-})
-// Get active fire alerts
-.then(function(){
-    $.get(alert_url + fire_zone, function(alertData){
-        var weatherHeader = ''
-        if (alertData.features.length > 0) {
-            for (i=0; i < alertData.features.length; i++) {
-                weatherHeader += '<div class="tooltip"><mark>' + alertData.features[i].properties.event + '</mark><span class="tooltiptext">'+
-                    alertData.features[i].properties.headline + '<br><br>' +
-                    alertData.features[i].properties.description + '</span></div><br>';
-            }
-            $('#NWS').html(function(index, currentContent) {
-                    return weatherHeader.replace(/\n/g, "<br />") + currentContent
+        // Get the forecast
+        $.get(forecast_url, function(forecastData) {
+            var NWSText = forecastData.productText;
+            // find the start of fire zone 
+            var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
+            // I've seen 'Extended' and 'EXTENDED'
+            var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
+            var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
+            var FWF = NWSText.slice(beginText, extendedEnd);
+            // Push to page
+            $('#NWS').html(FWF.replace(/\n/g, "<br />"));
+            // Get active fire alerts
+            $.get(alert_url + fire_zone, function(alertData){
+                var weatherHeader = ''
+                if (alertData.features.length > 0) {
+                    for (i=0; i < alertData.features.length; i++) {
+                        weatherHeader += '<div class="tooltip"><mark>' + alertData.features[i].properties.event + '</mark><span class="tooltiptext">'+
+                            alertData.features[i].properties.headline + '<br><br>' +
+                            alertData.features[i].properties.description + '</span></div><br>';
+                    }
+                    $('#NWS').html(function(index, currentContent) {
+                            return weatherHeader.replace(/\n/g, "<br />") + currentContent
+                    })
+                }
             })
-        }
-    })
-})
+        });
+    });
+});
 </script>
 </html>
