@@ -58,11 +58,10 @@
         <div id="NWS"></div>
     </body>
     <script>
-    var forestLatLong = '41.58677037,-121.0320475'
     var LTBMU = '39,-120'
     var SNF = '37.25,-119.35'
     // Forecast lat/long (forest centroid or some point inside)
-    var forecast_location = forestLatLong; 
+    var forecast_location = '41.58677037,-121.0320475'; 
     var point_url = 'https://api.weather.gov/points/' + forecast_location;
     var office_url = 'https://api.weather.gov/products/types/FWF/locations/'
     var alert_url = 'https://api.weather.gov/alerts/active/zone/'
@@ -83,15 +82,13 @@
             $.get(forecast_url, function(forecastData) {
                 var NWSText = forecastData.productText;
                 // find the start of fire zone 
-                var beginText = NWSText.lastIndexOf('
-', NWSText.indexOf(fire_zone.slice(3))) + 1;
+                var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
                 // I've seen 'Extended' and 'EXTENDED'
                 var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
                 var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
                 var FWF = NWSText.slice(beginText, extendedEnd);
                 // Push to page
-                $('#NWS').html(FWF.replace(/
-/g, "<br />"));
+                $('#NWS').html(FWF.replace(/\n/g, "<br />"));
                 // Get active fire alerts
                 $.get(alert_url + fire_zone, function(alertData){
                     var weatherHeader = ''
@@ -102,8 +99,7 @@
                                 alertData.features[i].properties.description + '</span></div><br>';
                         }
                         $('#NWS').html(function(index, currentContent) {
-                                return weatherHeader.replace(/
-/g, "<br />") + currentContent
+                                return weatherHeader.replace(/\n/g, "<br />") + currentContent
                         })
                     }
                 })
@@ -112,3 +108,4 @@
     });
     </script>
     </html>
+    
