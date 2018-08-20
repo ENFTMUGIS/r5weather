@@ -87,6 +87,7 @@
                 var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
                 var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
                 var FWF = NWSText.slice(beginText, extendedEnd);
+                console.log(FWF);
                 // Push to page
                 $('#NWS').html(FWF.replace(/\n/g, "<br />"));
                 // Get active fire alerts
