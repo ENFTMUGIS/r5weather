@@ -58,8 +58,9 @@
         <div id="NWS"></div>
     </body>
     <script>
-    var LTBMU = '39,-120'
-    var SNF = '37.25,-119.35'
+    var LTBMU = '39,-120';
+    var SNF = '37.25,-119.35';
+    var ENF = '38.75,-120.45';
     // Forecast lat/long (forest centroid or some point inside)
     var forecast_location = '32.74951243,-116.6006926'; 
     var point_url = 'https://api.weather.gov/points/' + forecast_location;
@@ -81,13 +82,19 @@
             // Get the forecast
             $.get(forecast_url, function(forecastData) {
                 var NWSText = forecastData.productText;
+                console.log(NWSText);
                 // find the start of fire zone 
                 var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
-                // I've seen 'Extended' and 'EXTENDED'
+                // I've seen 'Extended', 'EXTENDED', and 'FORECAST DAYS 3 THROUGH 7...'
                 var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
-                var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
+                // Sometimes there is no extended
+                if (extendedStart > 0){
+                    var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
+                } else {
+                    var extendedEnd = NWSText.toLowerCase().indexOf("$$", beginText)
+                }
+                console.log(beginText, extendedStart, extendedEnd);
                 var FWF = NWSText.slice(beginText, extendedEnd);
-                console.log(FWF);
                 // Push to page
                 $('#NWS').html(FWF.replace(/\n/g, "<br />"));
                 // Get active fire alerts
