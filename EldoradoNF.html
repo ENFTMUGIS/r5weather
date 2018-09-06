@@ -90,6 +90,7 @@
                 var NWSText = forecastData.productText;
                 // find the start of fire zone 
                 var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
+                var endText = NWSText.indexOf("$$", beginText)
                 // I've seen 'Extended', 'EXTENDED', and 'FORECAST DAYS 3 THROUGH 7...'
                 var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
                 // Sometimes there is no extended at the very end
@@ -100,7 +101,7 @@
                     var extendedEnd = NWSText.indexOf("$$", beginText)
                     var FWF = NWSText.slice(beginText, endText);
                 }
-                console.log(beginText, extendedStart, extendedEnd);
+                console.log(beginText, endText, extendedStart, extendedEnd);
                 var FWF = NWSText.slice(beginText, extendedEnd);
                 // Push to page
                 $('#NWS').html(FWF.replace(/\n/g, "<br />"));
