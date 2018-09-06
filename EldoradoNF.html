@@ -1,11 +1,17 @@
 <!DOCTYPE html>
     <html>
     <style>
+    body{
+        background-image: url("./lib/US_Forest_Service_logo.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+    }
     #NWS{
-        width: 530px;
-        height: 550px;
+        /*width: 530px;
+        height: 550px;*/
         padding-left: 11px;
-        background-color: #D4E8C4; /* #f5f5f5;*/
+        background-color: rgba(255, 255, 255, 0.8);/*#73DFFF; #D4E8C4;  #f5f5f5;*/
         white-space: pre;
         font-family: monospace;
         overflow: auto;
@@ -82,16 +88,17 @@
             // Get the forecast
             $.get(forecast_url, function(forecastData) {
                 var NWSText = forecastData.productText;
-                console.log(NWSText);
                 // find the start of fire zone 
                 var beginText = NWSText.lastIndexOf('\n', NWSText.indexOf(fire_zone.slice(3))) + 1;
                 // I've seen 'Extended', 'EXTENDED', and 'FORECAST DAYS 3 THROUGH 7...'
                 var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
-                // Sometimes there is no extended
+                // Sometimes there is no extended at the very end
                 if (extendedStart > 0){
-                    var extendedEnd = NWSText.toLowerCase().indexOf("$$", extendedStart)
+                    var extendedEnd = NWSText.indexOf("$$", extendedStart)
+                    var FWF = NWSText.slice(beginText, endText) + NWSText.slice(extendedStart, extendedEnd);
                 } else {
-                    var extendedEnd = NWSText.toLowerCase().indexOf("$$", beginText)
+                    var extendedEnd = NWSText.indexOf("$$", beginText)
+                    var FWF = NWSText.slice(beginText, endText);
                 }
                 console.log(beginText, extendedStart, extendedEnd);
                 var FWF = NWSText.slice(beginText, extendedEnd);
