@@ -78,7 +78,7 @@
     </head>
 
     <body>
-        <div id="Alerts" class='NWS'></div>
+        <div id="Alerts" class='NWS' name='Alerts'></div>
         <div id="NWS" class='NWS'>
             <span>Click on the link(s) below to go directly to the forecast segments</span></br>
             <a href='#Tahoe Basin Management Unit'>Tahoe Basin Management Unit</a></br>
@@ -86,6 +86,7 @@
             <a href='#Sierra Foothills'>Sierra Foothills</a></br>
             <a href='#Eastern Sacramento Valley'>Eastern Sacramento Valley</a></br>
         </div>
+        <div style='position: sticky; top:0px; text-align:right; font-family:monospace;'><a href='#Alerts'>TOP &#8682;</a></div>
         <div id="CAZ272" class='NWS'><a name='Tahoe Basin Management Unit' class='sectionheader'>Tahoe Basin Management Unit</a><br></div>
         <div id="CAZ269" class='NWS'><a name='Eldorado NF West of the Sierra Crest' class='sectionheader'>Eldorado NF West of the Sierra Crest</a><br></div>
         <div id="CAZ267" class='NWS'><a name='Sierra Foothills' class='sectionheader'>Sierra Foothills</a><br></div>
@@ -99,18 +100,21 @@
     var CNF = '32.74951243,-116.6006926';
     // Forecast lat/long (forest centroid or some point inside)
     var forecast_locations = {CAZ272:'39,-120', CAZ269:'38.75,-120.45', CAZ267:'38.72,-120.8', CAZ217:'38.66,-121.2'}; 
-    var point_url = 'https://api.weather.gov/points/';
-    var office_url = 'https://api.weather.gov/products/types/FWF/locations/';
-    var alert_url = 'https://api.weather.gov/alerts/active/zone/';
 
     for (let i in forecast_locations) {
         console.log(forecast_locations[i]);
-        //getTheZone(point_url + forecast_locations[i], i);
         
+        main(forecast_locations[i], i)
+    }
+    
+    function main(latLong, div) {
+        var point_url = 'https://api.weather.gov/points/';
+        var office_url = 'https://api.weather.gov/products/types/FWF/locations/';
+        var alert_url = 'https://api.weather.gov/alerts/active/zone/';
+
         let office, fire_zone
-        $.getJSON(point_url + forecast_locations[i]
+        $.getJSON(point_url + latLong
         ).then(function(data) {
-            //console.log(i)
             office = data.properties.cwa;
             var fz = data.properties.fireWeatherZone;
             fire_zone = fz.slice(fz.lastIndexOf('CAZ'))
@@ -127,20 +131,19 @@
             // I've seen 'Extended', 'EXTENDED', and 'FORECAST DAYS 3 THROUGH 7...'
             var extendedStart = NWSText.toLowerCase().indexOf("extended", beginText)
             // Sometimes there is no extended at the very end
-            if ((extendedStart > 0 && endText < extendedStart) && (i == 'CAZ272' || i == 'CAZ217')){
+            if (extendedStart > 0 && endText < extendedStart) {
                 var extendedEnd = NWSText.indexOf("$$", extendedStart)
                 var FWF = NWSText.slice(beginText, endText) + NWSText.slice(extendedStart, extendedEnd);
             } else {
                 var extendedEnd = NWSText.indexOf("$$", beginText);
                 var FWF = NWSText.slice(beginText, endText);
             }
-            console.log(beginText, endText, extendedStart, extendedEnd);
             // Push to page
-            $('#'+ i).html(function(index, currentContent) {
+            $('#' + div).html(function(index, currentContent) {
                 return currentContent + FWF.replace(/\n/g, "<br />")
             });
             return $.get(alert_url + fire_zone)
-        }).then(function(alertData) {
+        }).done(function(alertData) {
             var weatherHeader = ''
             if (alertData.features.length > 0) {
                 for (i=0; i < alertData.features.length; i++) {
@@ -154,7 +157,6 @@
             }
         })
     }
-    
     </script>
     </html>
     
