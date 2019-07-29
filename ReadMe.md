@@ -1,3 +1,5 @@
+[EldoradoNF](https://r5fire.github.io/r5fireweather/EldoradoNF.html)
+
 # Attention:
 This is not an official Forest Service website. Users should refer to https://www.fs.fed.us/ and https://www.fs.fed.us/ivm/ for official data and information.
 
