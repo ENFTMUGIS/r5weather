@@ -1,0 +1,55 @@
+    body{
+        margin: 0 0 0 0;
+        background-color: white;
+        background-image: url("./US_Forest_Service_logo.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+    }
+    .NWS{
+        /*width: 530px;
+        height: 550px;*/
+        padding-left: 11px;
+        padding-top: 11px;
+        background-color: rgba(255, 255, 255, 0.9);/*#73DFFF; #D4E8C4;  #f5f5f5;*/
+        white-space: pre;
+        font-size: 12;
+        font-family: monospace;
+        overflow: auto;
+    }
+    mark{
+        font-family: monospace;
+        color:white;
+        background-color:red;
+        font-weight: bold;
+    }
+    /* Tooltip container */
+    .tooltip {
+        position: relative;
+        display: inline;
+        border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    }
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+        font-size: 90%;
+        white-space: normal;
+        display: block;
+        visibility: hidden;
+        width: 450px;
+        max-width: 450px;
+        min-width: 450px;
+        word-wrap: break-word;
+        background-color: black;
+        color: #fff;
+        text-align: left;
+        padding: 5px 5px;
+        border-radius: 6px;
+     
+        /* Position the tooltip text */
+        position: absolute;
+        z-index: 1;
+    }
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
