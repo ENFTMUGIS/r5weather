@@ -1,6 +1,26 @@
 <!DOCTYPE html>
     <html>
     <link rel="stylesheet" href='./FWF.css'></link>
+    <style>
+    #NWS{
+        white-space: normal;
+    }
+    .sectionheader {
+        color: navy;
+        font-weight: bold;
+        font-size: 110%;
+        font-family: arial,georgia,courier;
+    }
+    #top {
+        position: sticky;
+        top:0px;
+        text-align:right;
+        font-family:monospace;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+    a:visited{
+        color:blue;
+    </style>
 
     <head>
     <title>Fire Weather Forecast</title>
@@ -12,12 +32,26 @@
     </head>
 
     <body>
-        <div id="Alerts" class='NWS'></div>
-        <div id="NWS" class='NWS'></div>
+        <div id="Alerts" class='NWS' name='Alerts'></div>
+        <div id="NWS" class='NWS'>
+            <span>Click on the link(s) below to go directly to the forecast segments</span></br>
+            <a href='#Tahoe Basin Management Unit'>Tahoe Basin Management Unit</a></br>
+            <a href='#Eldorado NF West of the Sierra Crest'>Eldorado NF West of the Sierra Crest</a></br>
+            <a href='#Sierra Foothills'>Sierra Foothills</a></br>
+            <a href='#Eastern Sacramento Valley'>Eastern Sacramento Valley</a></br>
+        </div>
+        <div id='top' style='   '><a href='#Alerts'>TOP &#8682;</a></div>
+        <div id="CAZ272" class='NWS'><a name='Tahoe Basin Management Unit' class='sectionheader'>Tahoe Basin Management Unit</a><br></div>
+        <div id="CAZ269" class='NWS'><a name='Eldorado NF West of the Sierra Crest' class='sectionheader'>Eldorado NF West of the Sierra Crest</a><br></div>
+        <div id="CAZ267" class='NWS'><a name='Sierra Foothills' class='sectionheader'>Sierra Foothills</a><br></div>
+        <div id="CAZ217" class='NWS'><a name='Eastern Sacramento Valley' class='sectionheader'>Eastern Sacramento Valley</a><br></div>
     </body>
     <script>
-  
-    RetrieveFWF(Eldorado, 'NWS')
-    
+    for (let i in CaminoECC) {
+        console.log(CaminoECC[i]);
+        
+        RetrieveFWF(CaminoECC[i], i)
+    }
     </script>
     </html>
+    
